@@ -1,77 +1,47 @@
 import tkinter as tk
-import random
 
-# Function to determine the winner
-def winner(player_choice, computer_choice):
-    if player_choice == computer_choice:
-        return "It's a tie!"
-    elif (player_choice == "Rock" and computer_choice == "Scissors") or \
-         (player_choice == "Paper" and computer_choice == "Rock") or \
-         (player_choice == "Scissors" and computer_choice == "Paper"):
-        return "You win!"
-    else:
-        return "Computer wins!"
+# Function to evaluate the expression
+def abc():
+    try:
+        result.set(eval(entry.get()))
+    except:
+        result.set("Error")
 
-# Function to reset the game
-def reset():
-    global player_score, computer_score, games_played
-    player_score = 0
-    computer_score = 0
-    games_played = 0
-    update_score()
-
-# Function to update the scoreboard
-def update_score():
-    score_label.config(text=f"Player: {player_score} | Computer: {computer_score} | Games Played: {games_played}")
-    
-# Function to handle player's choice
-def player_choice(choice):
-    global player_score, computer_score, games_played
-    computer_choices = ["Rock", "Paper", "Scissors"]
-    computer_choice = random.choice(computer_choices)
-    result = winner(choice, computer_choice)
-    result_label.config(text=result)
-    computer_choice_label.config(text=f"Computer's choice: {computer_choice}")
-    
-    # Update scores
-    if result == "You win!":
-        player_score += 1
-    elif result == "Computer wins!":
-        computer_score += 1
-    games_played += 1
-    update_score()
-    
 # Create the main window
 root = tk.Tk()
-root.title("Rock, Paper, Scissors")
+root.title("Simple Calculator")
 
-# Labels
-instruction_label = tk.Label(root, text="Choose one:")
-instruction_label.pack()
+# StringVar to store the result
+result = tk.StringVar()
 
-result_label = tk.Label(root, text="")
-result_label.pack()
+# Entry widget to input expression
+entry = tk.Entry(root, textvariable=result, font=('Arial', 30))
+entry.grid(row=0, column=0, columnspan=5, padx=15, pady=25, sticky="nsew")
 
-computer_choice_label = tk.Label(root, text="")
-computer_choice_label.pack()
+# Buttons for digits and operators
+buttons = [
+    '7', '8', '9', '/',
+    '4', '5', '6', '*',
+    '1', '2', '3', '-',
+    '0', '.', '%', '+'
+]
 
-score_label = tk.Label(root, text="")
-score_label.pack()
+row_num = 1
+col_num = 0
+for button in buttons:
+    tk.Button(root, text=button, font=('Arial', 20), command=lambda button=button: entry.insert(tk.END, button)).grid(row=row_num, column=col_num, padx=5, pady=5, sticky="nsew")
+    col_num += 1
+    if col_num > 3:
+        col_num = 0
+        row_num += 1
 
-# Buttons for player's choices
-choices = ["Rock", "Paper", "Scissors"]
-for choice in choices:
-    tk.Button(root, text=choice, width=60, height=3, command=lambda choice=choice: player_choice(choice)).pack()
+# Button to evaluate expression
+tk.Button(root, text="=", font=('Arial', 20), command=abc).grid(row=row_num, column=0, columnspan=4, padx=5, pady=5, sticky="nsew")
 
-
-# Initialize scores and games played
-player_score = 0
-computer_score = 0
-games_played = 0
-update_score()
-
-# Button to reset the game
-tk.Button(root, text="Play Again", width=10, command=reset).pack()
-
+# Configure rows and columns to expand with the window
+for i in range(5):
+    root.grid_rowconfigure(i, weight=1)
+for i in range(4):
+    root.grid_columnconfigure(i, weight=1)
 
 root.mainloop()
