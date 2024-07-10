@@ -9,14 +9,14 @@ def abc():
 
 # Create the main window
 root = tk.Tk()
-root.title("Simple Calculator")
+root.title("My Own Calculator")
 
 # StringVar to store the result
 result = tk.StringVar()
 
 # Entry widget to input expression
 entry = tk.Entry(root, textvariable=result, font=('Arial', 30))
-entry.grid(row=0, column=0, columnspan=5, padx=15, pady=25, sticky="nsew")
+entry.grid( column=0, row=0, columnspan=5, padx=15, pady=25, sticky="nsew")
 
 # Buttons for digits and operators
 buttons = [
